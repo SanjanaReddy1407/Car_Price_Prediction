@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Price Predictor</title>
+    <style>
+    /* Modern CSS Reset & Variable Definitions */
+    :root {
+        --primary-color: #4f46e5;
+        --primary-hover: #4338ca;
+        --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        --card-bg: rgba(255, 255, 255, 0.95);
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border-color: #cbd5e1;
+        --success-bg: #dcfce7;
+        --success-text: #166534;
+        --success-border: #bbf7d0;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: var(--bg-gradient);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        color: var(--text-main);
+    }
+
+    /* Main Container Card */
+    .container {
+        background: var(--card-bg);
+        width: 100%;
+        max-width: 600px;
+        padding: 35px;
+        border-radius: 16px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+        font-size: 24px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 25px;
+        color: #0f172a;
+        letter-spacing: -0.5px;
+        position: relative;
+    }
+
+    h2::after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 4px;
+        background: var(--primary-color);
+        margin: 8px auto 0 auto;
+        border-radius: 2px;
+    }
+
+    /* Form Layout Grid */
+    form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    /* Make numeric inputs span full width for better balance, selectors half width */
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group.full-width {
+        grid-column: span 2;
+    }
+
+    /* Responsive adjustment for small screens */
+    @media (max-width: 500px) {
+        form {
+            grid-template-columns: 1fr;
+        }
+        .form-group.full-width {
+            grid-column: span 1;
+        }
+    }
+
+    label {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Input and Select Components */
+    input, select {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background-color: #fff;
+        color: var(--text-main);
+        outline: none;
+        transition: all 0.2s ease-in-out;
+    }
+
+    input:focus, select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+
+    input::placeholder {
+        color: #94a3b8;
+    }
+
+    /* Primary Action Button */
+    button {
+        grid-column: span 2;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 14px;
+        font-size: 16px;
+        font-weight: 600;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, transform 0.1s ease;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: var(--primary-hover);
+    }
+
+    button:active {
+        transform: scale(0.98);
+    }
+
+    @media (max-width: 500px) {
+        button {
+            grid-column: span 1;
+        }
+    }
+
+    /* Premium Design Result Banner */
+    .result {
+        grid-column: span 2;
+        margin-top: 25px;
+        padding: 18px;
+        background-color: var(--success-bg);
+        border: 1px solid var(--success-border);
+        color: var(--success-text);
+        border-radius: 10px;
+        text-align: center;
+        font-size: 18px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        animation: slideUp 0.4s ease-out;
+    }
+
+    @media (max-width: 500px) {
+        .result {
+            grid-column: span 1;
+        }
+    }
+
+    /* Smooth transition entry for the result card */
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Car Valuation Engine</h2>
+    <form action="/predict" method="post">
+        
+        <div class="form-group">
+            <label>Year of Purchase:</label>
+            <input type="number" name="Year" min="2000" max="2026" >
+        </div>
+
+        <div class="form-group">
+            <label>Showroom Price (In Lakhs):</label>
+            <input type="number" name="Present_Price" step="0.01" >
+        </div>
+
+        <div class="form-group">
+            <label>Kilometers Driven:</label>
+            <input type="number" name="Driven_kms" >
+        </div>
+
+        <div class="form-group">
+            <label>Previous Owners (0, 1, 3):</label>
+            <input type="number" name="Owner" min="0" max="3" >
+        </div>
+
+        <div class="form-group">
+            <label>Fuel Type:</label>
+            <select name="Fuel_Type">
+                <option value="Petrol">Petrol</option>
+                <option value="Diesel">Diesel</option>
+                <option value="CNG">CNG</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Seller Type:</label>
+            <select name="Seller_Type">
+                <option value="Dealer">Dealer</option>
+                <option value="Individual">Individual</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Transmission Type:</label>
+            <select name="Transmission">
+                <option value="Manual">Manual</option>
+                <option value="Automatic">Automatic</option>
+            </select>
+        </div>
+
+        <button type="submit">Predict Resale Value</button>
+    </form>
+
+    {% if prediction_text %}
+        <div class="result">
+            <strong>{{ prediction_text }}</strong>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
